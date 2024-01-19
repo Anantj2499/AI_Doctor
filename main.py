@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 import pickle
 import numpy as np
 import pandas as pd
+import ast
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -79,13 +80,16 @@ def predict():
     result = svc.predict([input_query])[0]
     disease = diseases_list[result]
 
-    desc = description[description['Disease'] == disease]['Description'].tolist()
+    desc = description[description['Disease'] == disease]['Description'].item()
 
     pre = precautions[precautions['Disease'] == disease][['Precaution_1', 'Precaution_2', 'Precaution_3', 'Precaution_4']].values.tolist()
+    pre = sum(pre, [])
 
     med = medications[medications['Disease'] == disease]['Medication'].tolist()
+    med = ast.literal_eval(med[0])
 
     die = diets[diets['Disease'] == disease]['Diet'].tolist()
+    die = ast.literal_eval(die[0])
 
     wrkout = workout[workout['disease'] == disease]['workout'].tolist()
     return jsonify({
