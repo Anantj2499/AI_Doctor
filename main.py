@@ -83,7 +83,7 @@ def predict():
     desc = description[description['Disease'] == disease]['Description'].item()
 
     pre = precautions[precautions['Disease'] == disease][['Precaution_1', 'Precaution_2', 'Precaution_3', 'Precaution_4']].values.tolist()
-    pre = sum(pre, [])
+    pre = [item for sublist in pre for item in sublist if item is not None and item is not np.nan]
 
     med = medications[medications['Disease'] == disease]['Medication'].tolist()
     med = ast.literal_eval(med[0])
